@@ -38,13 +38,17 @@ function replaceString(pString,pSearch,pReplace)
 }
 
 
+function el(pID) {
+  return document.getElementById(pID)
+}
+
 function convertLinks(pString)
 {
-	pString = pString.replace(/\[\[([^\|\]:]+)\|([^\|\]:]+)\]\]/g,"[[Wikipedia:$1|$2]]");
-	pString = pString.replace(/\[\[([^\|\]:]+)\]\]/g,"[[Wikipedia:$1|$1]]");
+	pString = pString.replace(/\[\[([^\|\]:]+)\|([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$2]]");
+	pString = pString.replace(/\[\[([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$1]]");
 	//pString = pString.replace(/\[\[([^\|]+)|([^\|\]]+)\]\]/g,"[[Wikipedia:$1|$2]]");
 	//pString = pString.replace(/\[\[([A-Za-z0-9 \-\/]+)|([A-Za-z0-9 \-\/]+)\]\]/g,"[[Wikipedia:$1|$2]]");
-	
+
 	return pString
 }
 
@@ -55,6 +59,9 @@ function Wikipedia2Wikiversity()
 	document.fconvert.latextext.value = convertLinks(vString);
 }
 
+function setWikiLanguage(pLang) {
+  el("prefix_wiki").value = "w:"+pLang;
+}
 
 </script>
 
@@ -66,13 +73,63 @@ function Wikipedia2Wikiversity()
 
 </head>
 
-<body style="font-family:Arial,Verdana; font-size:12pt; color:black" bgcolor="white">
+<body style="font-family:Arial,Verdana; font-size:12pt; color:black" bgcolor="#e6f7ff">
 <h1>Source from Wikipedia</h1>
 <form name="fconvert">
-<textarea name="latextext" cols="125" rows="20">This is a 
+<textarea name="latextext" cols="125" rows="20">This is a
 Text1 [[linkname]] with links of different types. Text2 [[linkname|linktext]] with image [[File:myimage.png]]
 </textarea><br>
+Prefix: <input type="text" id="prefix_wiki" size="15" value="Wikipedia">
+<select id="sWikiLanguage" onchange="setWikiLanguage(this.value)">
+         <option value="en" selected="selected">English</option>
+         <option value="es">Spanish</option>
+         <option value="de">Deutsch</option>
+         <option value="fr">French</option>
+         <option value="it">Italian</option>
+         <option value="nl">Dutch</option>
+         <option value="ja">Japanese</option>
+         <option value="pl">Polish</option>
+         <option value="ru">Russian</option>
+         <option value="sv">Swedish</option>
+         <option value="vi">Vietnamese</option>
+         <option value="ar">Arabic</option>
+         <option value="id">Indonesian</option>
+         <option value="ms">Malay</option>
+         <option value="ca">Catalan</option>
+         <option value="cs">Czech</option>
+         <option value="eu">Basque</option>
+         <option value="fa">Persian</option>
+         <option value="ko">Korean</option>
+         <option value="hu">Hungarian</option>
+         <option value="no">Norwegian</option>
+         <option value="pt">Portuguese</option>
+         <option value="ro">Romanian</option>
+         <option value="sr">Serbian</option>
+         <option value="sh">Serbo-Croatian</option>
+         <option value="fi">Finnish</option>
+         <option value="tr">Turkish</option>
+         <option value="uk">Ukrainian</option>
+         <option value="zh">Chinese</option>
+         <option value="bs">Bosnian</option>
+         <option value="bg">Bulgarian</option>
+         <option value="da">Danish</option>
+         <option value="et">Estonian</option>
+         <option value="el">Greek</option>
+         <option value="eo">Esperanto</option>
+         <option value="gl">Galician</option>
+         <option value="he">Hebrew</option>
+         <option value="hr">Croatian</option>
+         <option value="lv">Latvian</option>
+         <option value="lt">Lithuanian</option>
+         <option value="nn">Norwegian Nynorsk</option>
+         <option value="sk">Slovak</option>
+         <option value="sl">Slovenian</option>
+         <option value="th">Thai</option>
+       </select>
+
 <input name="bConvert" value=" Convert Links " onclick="Wikipedia2Wikiversity()" type="button">
 </form>
-
+<center style="font-size: 10px;">
+  <a href="https://www.github.com/niebert/Wikipedia2Wikiversity" target="_blank"> GitHub Sources</a> - <a href="https://github.com/niebert/Wikipedia2Wikiversity/archive/master.zip"  target="_blank">Download ZIP</a>
+</center>
 </body></html>
