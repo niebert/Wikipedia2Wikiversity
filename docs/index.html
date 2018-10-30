@@ -42,11 +42,24 @@ function el(pID) {
   return document.getElementById(pID)
 }
 
-function convertLinks(pString)
+function convertBracketLinks(pString)
 {
   // {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}}
   pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1}}");
   pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1|"+el("prefix_wiki").value+":$2}}");
+ //{{Main|Wikipedia:West African Ebola virus epidemic timeline of reported cases and deaths}}
+  pString = pString.replace(/\{\{Main\|([^\|\}:]+)\}\}/g,"{{Main|"+el("prefix_wiki").value+":$1}}");
+ //  {{See also|Ebola virus epidemic in West Africa timeline}}
+ pString = pString.replace(/\{\{See also\|([^\|\}:]+)\}\}/g,"{{See also|"+el("prefix_wiki").value+":$1}}");
+ return pString
+}
+
+function convertLinks(pString)
+{
+  // {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}}
+  //pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1}}");
+  //pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1|"+el("prefix_wiki").value+":$2}}");
+  pString = convertBracketLinks(pString);
   pString = pString.replace(/\[\[([^\|\]:]+)\|([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$2]]");
 	pString = pString.replace(/\[\[([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$1]]");
 	//pString = pString.replace(/\[\[([^\|]+)|([^\|\]]+)\]\]/g,"[[Wikipedia:$1|$2]]");
@@ -55,11 +68,19 @@ function convertLinks(pString)
 	return pString
 }
 
+function BracketLinks2Wikiversity()
+{
+	var vString = document.fconvert.latextext.value;
+  vString = convertBracketLinks(vString);
+	document.fconvert.latextext.value = vString;
+}
 
 function Wikipedia2Wikiversity()
 {
 	var vString = document.fconvert.latextext.value;
-	document.fconvert.latextext.value = convertLinks(vString);
+  vString = convertBracketLinks(vString);
+  vString = convertLinks(vString);
+	document.fconvert.latextext.value = vString;
 }
 
 function setWikiLanguage(pLang) {
@@ -131,6 +152,7 @@ Prefix: <input type="text" id="prefix_wiki" size="15" value="Wikipedia">
          <option value="th">Thai</option>
        </select>
 
+<input name="bConvert" value=" Convert {{Link}}s " onclick="BracketLinks2Wikiversity()" type="button">
 <input name="bConvert" value=" Convert Links " onclick="Wikipedia2Wikiversity()" type="button">
 </form>
 <center style="font-size: 10px;">
