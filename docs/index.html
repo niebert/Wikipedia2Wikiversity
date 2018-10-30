@@ -49,6 +49,8 @@ function convertBracketLinks(pString)
   pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1|"+el("prefix_wiki").value+":$2}}");
  //{{Main|Wikipedia:West African Ebola virus epidemic timeline of reported cases and deaths}}
   pString = pString.replace(/\{\{Main\|([^\|\}:]+)\}\}/g,"{{Main|"+el("prefix_wiki").value+":$1}}");
+ //{{Main article|
+ pString = pString.replace(/\{\{Main article\|([^\|\}:]+)\}\}/g,"{{Main article|"+el("prefix_wiki").value+":$1}}");
  //  {{See also|Ebola virus epidemic in West Africa timeline}}
  pString = pString.replace(/\{\{See also\|([^\|\}:]+)\}\}/g,"{{See also|"+el("prefix_wiki").value+":$1}}");
  return pString
