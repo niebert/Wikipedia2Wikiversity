@@ -44,7 +44,10 @@ function el(pID) {
 
 function convertLinks(pString)
 {
-	pString = pString.replace(/\[\[([^\|\]:]+)\|([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$2]]");
+  // {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}}
+  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1}}");
+  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1|"+el("prefix_wiki").value+":$2}}");
+  pString = pString.replace(/\[\[([^\|\]:]+)\|([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$2]]");
 	pString = pString.replace(/\[\[([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$1]]");
 	//pString = pString.replace(/\[\[([^\|]+)|([^\|\]]+)\]\]/g,"[[Wikipedia:$1|$2]]");
 	//pString = pString.replace(/\[\[([A-Za-z0-9 \-\/]+)|([A-Za-z0-9 \-\/]+)\]\]/g,"[[Wikipedia:$1|$2]]");
@@ -77,7 +80,8 @@ function setWikiLanguage(pLang) {
 <h1>Source from Wikipedia</h1>
 <form name="fconvert">
 <textarea name="latextext" cols="125" rows="20">This is a
-Text1 [[linkname]] with links of different types. Text2 [[linkname|linktext]] with image [[File:myimage.png]]
+Text1 [[linkname]] with links of different types. Text2 [[linkname|linktext]] with image [[File:myimage.png]].
+Link to further information looks like {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}} in the wiki source.
 </textarea><br>
 Prefix: <input type="text" id="prefix_wiki" size="15" value="Wikipedia">
 <select id="sWikiLanguage" onchange="setWikiLanguage(this.value)">
