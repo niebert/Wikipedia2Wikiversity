@@ -134,7 +134,21 @@ function Wikipedia2Wikiversity()
 }
 
 function setWikiLanguage(pLang) {
-  el("prefix_wiki").value = "w:"+pLang;
+  var vDomain = el("sWikiDomain").value;
+  switch (vDomain) {
+    case "wikipedia":
+      vDomain = "w"
+    break;
+    case "wikiversity":
+      vDomain = "v"
+    break;
+    case "wikibooks":
+      vDomain = "b"
+    break;
+    default:
+
+  }
+  el("prefix_wiki").value = vDomain + ":"+pLang;
 }
 
 
@@ -158,7 +172,7 @@ setTimeout("setWikiLanguage(el('sWikiLanguage').value)",1000)
       <b>Wiki Domain</b>
     </td>
     <td>
-      <select name="domain" id="sWikiDomain">
+      <select name="domain" id="sWikiDomain" onchange="setWikiLanguage(el('sWikiLanguage').value)">
            <option value="wikiversity" selected>Wikiversity</option>
            <option value="wikipedia">Wikipedia</option>
            <option value="wikibook">WikiBook</option>
