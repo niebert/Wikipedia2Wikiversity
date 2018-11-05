@@ -5,90 +5,140 @@
    <meta http-equiv="last-modification" content="23.4.2004 (9:35)">
    <meta http-equiv="content-language" content="de">
    <meta http-equiv="desktop-type" content="tasks">
+   <script language="javascript" src="js/wiki_replace.js"></script>
+   <script language="javascript" src="js/wtf_fetch.js"></script>
 <script language="javascript">
-
-function replaceStringReverse(pString,pReplace,pSearch)
-//###### replaces in the string "pString" multiple substrings "pSearch" by "pReplace"
-{
-	return replaceString(pString,pSearch,pReplace);
-}
-
-function replaceString(pString,pSearch,pReplace)
-//###### replaces in the string "pString" multiple substrings "pSearch" by "pReplace"
-{
-	//alert("cstring.js - replaceString() "+pString);
-	if (pString != '') {
-		var vHelpString = '';
-        var vN = pString.indexOf(pSearch);
-		var vReturnString = '';
-		while (vN >= 0)
-		{
-			if (vN > 0)
-				vReturnString += pString.substring(0, vN);
-			vReturnString += pReplace;
-            if (vN + pSearch.length < pString.length) {
-				pString = pString.substring(vN+pSearch.length, pString.length);
-			} else {
-				pString = ''
-			}
-			vN = pString.indexOf(pSearch);
-		};
-	};
-	return vReturnString + pString;
-}
-
 
 function el(pID) {
   return document.getElementById(pID)
+};
+
+function getSourceURL () {
+  var vURL = "https://"+el("sWikiLanguage").value + "." + el("sWikiDomain").value+".org/wiki/";
+  vURL += encodeURI(el("tTitle").value);
+  return vURL
 }
 
-function convertBracketLinks(pString)
-{
-  // {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}}
-  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1}}");
-  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1|"+el("prefix_wiki").value+":$2}}");
- //{{Main|Wikipedia:West African Ebola virus epidemic timeline of reported cases and deaths}}
-  pString = pString.replace(/\{\{Main\|([^\|\}:]+)\}\}/g,"{{Main|"+el("prefix_wiki").value+":$1}}");
- //{{Main article|
- pString = pString.replace(/\{\{Main article\|([^\|\}:]+)\}\}/g,"{{Main article|"+el("prefix_wiki").value+":$1}}");
- //  {{See also|Ebola virus epidemic in West Africa timeline}}
- pString = pString.replace(/\{\{See also\|([^\|\}:]+)\}\}/g,"{{See also|"+el("prefix_wiki").value+":$1}}");
- return pString
+function callWikiDisplay() {
+  var vURL = getSourceURL();
+  //document.location.href=vURL;
+  window.open(vURL);
+};
+
+function getDate4Lang(pLang) {
+    var d = new Date();
+    var vDays = d.getDate();
+    var vMonths = d.getMonth()+1;
+    var vYear = d.getFullYear();
+    var vDateStr = "";
+    switch (pLang) {
+      case "de":
+        vDateStr = vDays + "." + vMonths + "." + vYear
+      break;
+      case "en":
+        vDateStr = vMonths + "/" + vDays +  "/" + vYear
+      break;
+      default:
+        vDateStr = vYear + "/"  + vMonths + "/" + vDays;
+    };
+    return vDateStr
 }
 
-function convertLinks(pString)
-{
-  // {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}}
-  //pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1}}");
-  //pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1|"+el("prefix_wiki").value+":$2}}");
-  pString = convertBracketLinks(pString);
-  pString = pString.replace(/\[\[([^\|\]:]+)\|([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$2]]");
-	pString = pString.replace(/\[\[([^\|\]:]+)\]\]/g,"[["+el("prefix_wiki").value+":$1|$1]]");
-	//pString = pString.replace(/\[\[([^\|]+)|([^\|\]]+)\]\]/g,"[[Wikipedia:$1|$2]]");
-	//pString = pString.replace(/\[\[([A-Za-z0-9 \-\/]+)|([A-Za-z0-9 \-\/]+)\]\]/g,"[[Wikipedia:$1|$2]]");
-
-	return pString
+function firstUpperCase(pString) {
+    return pString.charAt(0).toUpperCase() + pString.slice(1);
 }
+
+function get_header_info(pLang) {
+  var out = "";
+  switch (pLang) {
+    case "de":
+      out += "== Seiten-Information ==";
+    break;
+    default:
+        out += "== Page Information ==";
+  }
+  return out;
+}
+
+function append_source_info () {
+  var out = "\n";
+  var vLang = el("sWikiLanguage").value;
+  var vURL = getSourceURL();
+  var vDomain = firstUpperCase(el("sWikiDomain").value);
+  var vHeader = get_header_info(vLang);
+  switch (vLang) {
+    case "de":
+      out += "\n"+vHeader;
+      out += "\nDiese Seite wurde auf Basis der folgenden [" + vURL + " "+vDomain+"-Quelle] erstellt:";
+      out += "\n* [" + vURL + " "+el("tTitle").value+"] "+vURL;
+      out += "\n* Datum: "+getDate4Lang(vLang);
+      out += "\n* [https://niebert.github.com/Wikipedia2Wikiversity Wikipedia2Wikiversity-Konverter]: https://niebert.github.com/Wikipedia2Wikiversity";
+      out += "\n";
+    break;
+    default:
+      out += "\n"+vHeader;
+      out += "\nThis page was based on the following [" + vURL + " "+el("sWikiDomain").value+"-source page]:";
+      out += "\n* [" + vURL + " "+el("tTitle").value+"] "+vURL;
+      out += "\n* Datum: "+getDate4Lang(vLang);
+      out += "\n* [https://niebert.github.com/Wikipedia2Wikiversity Wikipedia2Wikiversity-Converter]: https://niebert.github.com/Wikipedia2Wikiversity";
+      out += "\n";
+  }
+  out += "";
+  return out;
+}
+
+function info_exists(pString) {
+  var vLang = el("sWikiLanguage").value;
+  var vHeader = get_header_info(vLang);
+  var vRet = "NO";
+  if (pString && (pString.indexOf(vHeader) > 0)) {
+    vRet = "YES"
+  };
+  console.log("Info-Section exists? "+vRet);
+  return vRet
+}
+
+function callWikiSource() {
+    //document.location.href=vURL;
+  //window.open(vURL);
+  wtf_fetch.getPage(el("tTitle").value , el("sWikiLanguage").value ,el("sWikiDomain").value, function(err, doc) {
+    // doc contains the download
+    //alert(JSON.stringify(doc.wiki))
+    el("tWikiSource").value = doc.wiki;
+    if (info_exists(doc.wiki) == "NO") {
+      el("tWikiSource").value = doc.wiki + append_source_info();
+    }
+    //console.log(doc);
+  });
+};
 
 function BracketLinks2Wikiversity()
 {
-	var vString = document.fconvert.latextext.value;
+	var vString = document.fconvert.wikisource.value;
   vString = convertBracketLinks(vString);
-	document.fconvert.latextext.value = vString;
+	document.fconvert.wikisource.value = vString;
 }
 
 function Wikipedia2Wikiversity()
 {
-	var vString = document.fconvert.latextext.value;
+	var vString = document.fconvert.wikisource.value;
   vString = convertBracketLinks(vString);
-  vString = convertLinks(vString);
-	document.fconvert.latextext.value = vString;
+  vString = convertLinks(vString); // + append_source_info();
+  console.log("Source Info:\n"+append_source_info());
+  if (info_exists(vString) == "NO") {
+    console.log("Append Source Info:");
+    vString = vString + append_source_info();
+  }
+
+	document.fconvert.wikisource.value = vString;
 }
 
 function setWikiLanguage(pLang) {
   el("prefix_wiki").value = "w:"+pLang;
 }
 
+
+setTimeout("setWikiLanguage(el('sWikiLanguage').value)",1000)
 </script>
 
 
@@ -100,64 +150,130 @@ function setWikiLanguage(pLang) {
 </head>
 
 <body style="font-family:Arial,Verdana; font-size:12pt; color:black" bgcolor="#CACACA">
-<h1>Source from Wikipedia</h1>
+  <h1>Wikipedia2Wikiversity</h1>
+  <h3>Convert to Inter-Wiki Links in Source from Wikipedia</h3>
+<table border="1">
+  <tr>
+    <td>
+      <b>Wiki Domain</b>
+    </td>
+    <td>
+      <select name="domain" id="sWikiDomain">
+           <option value="wikiversity" selected>Wikiversity</option>
+           <option value="wikipedia">Wikipedia</option>
+           <option value="wikibook">WikiBook</option>
+           <option value="wiktionary">Wikionary</option>
+           <option value="wikiquote">WikiQuote</option>
+           <option value="wikisource">WikiSource</option>
+        </select>
+      </td>
+  </tr>
+  <tr>
+    <td>
+      <b>Article</b>
+    </td>
+    <td>
+      <input type="text" size="80" name="title" id="tTitle" value="Normen, Metriken, Topologie">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <b>Author</b>
+    </td>
+    <td>
+      <input type="text" size="80" name="author" id="tAuthor" value="Wikiversity Authors">
+    </td>
+  </tr>
+    <tr>
+      <td>
+        <b>Language</b>
+      </td>
+      <td>
+        <select name="language" id="sWikiLanguage" onchange="setWikiLanguage(this.value)">
+             <option value="en">English</option>
+             <option value="es">Spanish</option>
+             <option value="de"  selected="selected">German</option>
+             <option value="fr">French</option>
+             <option value="it">Italian</option>
+             <option value="nl">Dutch</option>
+             <option value="ja">Japanese</option>
+             <option value="pl">Polish</option>
+             <option value="ru">Russian</option>
+             <option value="sv">Swedish</option>
+             <option value="vi">Vietnamese</option>
+             <option value="ar">Arabic</option>
+             <option value="id">Indonesian</option>
+             <option value="ms">Malay</option>
+             <option value="ca">Catalan</option>
+             <option value="cs">Czech</option>
+             <option value="eu">Basque</option>
+             <option value="fa">Persian</option>
+             <option value="ko">Korean</option>
+             <option value="hu">Hungarian</option>
+             <option value="no">Norwegian</option>
+             <option value="pt">Portuguese</option>
+             <option value="ro">Romanian</option>
+             <option value="sr">Serbian</option>
+             <option value="sh">Serbo-Croatian</option>
+             <option value="fi">Finnish</option>
+             <option value="tr">Turkish</option>
+             <option value="uk">Ukrainian</option>
+             <option value="zh">Chinese</option>
+             <option value="bs">Bosnian</option>
+             <option value="bg">Bulgarian</option>
+             <option value="da">Danish</option>
+             <option value="et">Estonian</option>
+             <option value="el">Greek</option>
+             <option value="eo">Esperanto</option>
+             <option value="gl">Galician</option>
+             <option value="he">Hebrew</option>
+             <option value="hr">Croatian</option>
+             <option value="lv">Latvian</option>
+             <option value="lt">Lithuanian</option>
+             <option value="nn">Norwegian Nynorsk</option>
+             <option value="sk">Slovak</option>
+             <option value="sl">Slovenian</option>
+             <option value="th">Thai</option>
+           </select>
+      </td>
+  </tr>
+  <tr>
+    <td>
+      <b>Wiki Download:</b>
+    </td>
+    <td>
+      <input type="button" id="bWikiDisplay" value="Display Wiki Source" onclick="callWikiDisplay()">
+      <input type="button" id="bWikiSource" value="Download Source" onclick="callWikiSource()" style="color:blue">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <b>Link Prefix:</b>
+    </td>
+    <td>
+      <input type="text" id="prefix_wiki" size="15" value="Wikipedia">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <b>Converter:</b>
+    </td>
+    <td>
+      <input name="bConvert" value=" Convert {{Link}}s " onclick="BracketLinks2Wikiversity()" type="button">
+      <input name="bConvert" value=" Convert to Inter-Wiki Links " onclick="Wikipedia2Wikiversity()" type="button" style="color:blue">
+    </td>
+  </tr>
+</table>
+<hr>
 <form name="fconvert">
-<textarea name="latextext" cols="125" rows="20">This is a
+<textarea name="wikisource" id="tWikiSource" cols="125" rows="20">This is a
 Text1 [[linkname]] with links of different types. Text2 [[linkname|linktext]] with image [[File:myimage.png]].
 Link to further information looks like {{Further|Ebola virus epidemic in Sierra Leone}} in the wiki source.
 </textarea><br>
-Prefix: <input type="text" id="prefix_wiki" size="15" value="Wikipedia">
-<select id="sWikiLanguage" onchange="setWikiLanguage(this.value)">
-         <option value="en" selected="selected">English</option>
-         <option value="es">Spanish</option>
-         <option value="de">Deutsch</option>
-         <option value="fr">French</option>
-         <option value="it">Italian</option>
-         <option value="nl">Dutch</option>
-         <option value="ja">Japanese</option>
-         <option value="pl">Polish</option>
-         <option value="ru">Russian</option>
-         <option value="sv">Swedish</option>
-         <option value="vi">Vietnamese</option>
-         <option value="ar">Arabic</option>
-         <option value="id">Indonesian</option>
-         <option value="ms">Malay</option>
-         <option value="ca">Catalan</option>
-         <option value="cs">Czech</option>
-         <option value="eu">Basque</option>
-         <option value="fa">Persian</option>
-         <option value="ko">Korean</option>
-         <option value="hu">Hungarian</option>
-         <option value="no">Norwegian</option>
-         <option value="pt">Portuguese</option>
-         <option value="ro">Romanian</option>
-         <option value="sr">Serbian</option>
-         <option value="sh">Serbo-Croatian</option>
-         <option value="fi">Finnish</option>
-         <option value="tr">Turkish</option>
-         <option value="uk">Ukrainian</option>
-         <option value="zh">Chinese</option>
-         <option value="bs">Bosnian</option>
-         <option value="bg">Bulgarian</option>
-         <option value="da">Danish</option>
-         <option value="et">Estonian</option>
-         <option value="el">Greek</option>
-         <option value="eo">Esperanto</option>
-         <option value="gl">Galician</option>
-         <option value="he">Hebrew</option>
-         <option value="hr">Croatian</option>
-         <option value="lv">Latvian</option>
-         <option value="lt">Lithuanian</option>
-         <option value="nn">Norwegian Nynorsk</option>
-         <option value="sk">Slovak</option>
-         <option value="sl">Slovenian</option>
-         <option value="th">Thai</option>
-       </select>
-
-<input name="bConvert" value=" Convert {{Link}}s " onclick="BracketLinks2Wikiversity()" type="button">
-<input name="bConvert" value=" Convert Links " onclick="Wikipedia2Wikiversity()" type="button">
 </form>
 <center style="font-size: 10px;">
-  <a href="https://www.github.com/niebert/Wikipedia2Wikiversity" target="_blank"> GitHub Sources</a> - <a href="https://github.com/niebert/Wikipedia2Wikiversity/archive/master.zip"  target="_blank">Download ZIP</a>
+  <a href="https://www.github.com/niebert/Wikipedia2Wikiversity" target="_blank"> Wikipedia2Wikiversity GitHub Sources</a> - <a href="https://github.com/niebert/Wikipedia2Wikiversity/archive/master.zip"  target="_blank">Download ZIP</a>
+  <br>
+  Wikipedia2Wikiversity uses <a href="https://www.github.com/niebert/wtf_fetch" target="_blank">wtf_fetch to download Wiki-Sources from the MediaWiki API</a>
 </center>
 </body></html>
