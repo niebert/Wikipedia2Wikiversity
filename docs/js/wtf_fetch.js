@@ -678,7 +678,7 @@ var getPage = function getPage(title, a, b, c, d) {
       //support 'err-back' format
       if (callback && typeof callback === 'function') {
         callback(null, doc);
-        console.log(doc);
+        //console.log(doc);
       }
       resolve(doc);
     });

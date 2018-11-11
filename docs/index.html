@@ -101,9 +101,12 @@ function info_exists(pString) {
 function callWikiSource() {
     //document.location.href=vURL;
   //window.open(vURL);
+  console.log("CALL: callWikiSource() - Title: '" + el("tTitle").value + "'"
+    + " Language: '" + el("sWikiLanguage").value + "'"
+    + " Domain: '" + el("sWikiDomain").value+"'" );
   wtf_fetch.getPage(el("tTitle").value , el("sWikiLanguage").value ,el("sWikiDomain").value, function(err, doc) {
     // doc contains the download
-    //alert(JSON.stringify(doc.wiki))
+    console.log(JSON.stringify(doc.wiki))
     el("tWikiSource").value = doc.wiki;
     if (info_exists(doc.wiki) == "NO") {
       el("tWikiSource").value = doc.wiki + append_source_info();
@@ -151,8 +154,12 @@ function setWikiLanguage(pLang) {
   el("prefix_wiki").value = vDomain + ":"+pLang;
 }
 
+function onLoadApp() {
 
-setTimeout("setWikiLanguage(el('sWikiLanguage').value)",1000)
+  setWikiLanguage(el('sWikiLanguage').value);
+}
+
+setTimeout("onLoadApp()",1000)
 </script>
 
 
@@ -187,7 +194,7 @@ setTimeout("setWikiLanguage(el('sWikiLanguage').value)",1000)
       <b>Article</b>
     </td>
     <td>
-      <input type="text" size="80" name="title" id="tTitle" value="Normen, Metriken, Topologie">
+      <input type="text" size="80" name="title" id="tTitle" value="Swarm Intelligence">
     </td>
   </tr>
   <tr>
@@ -195,7 +202,7 @@ setTimeout("setWikiLanguage(el('sWikiLanguage').value)",1000)
       <b>Author</b>
     </td>
     <td>
-      <input type="text" size="80" name="author" id="tAuthor" value="Wikiversity Authors">
+      <input type="text" size="80" name="author" id="tAuthor" value="Wikipedia Authors">
     </td>
   </tr>
     <tr>
