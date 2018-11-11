@@ -106,7 +106,7 @@ function callWikiSource() {
     + " Domain: '" + el("sWikiDomain").value+"'" );
   wtf_fetch.getPage(el("tTitle").value , el("sWikiLanguage").value ,el("sWikiDomain").value, function(err, doc) {
     // doc contains the download
-    console.log(JSON.stringify(doc.wiki))
+    // console.log(JSON.stringify(doc.wiki))
     el("tWikiSource").value = doc.wiki;
     if (info_exists(doc.wiki) == "NO") {
       el("tWikiSource").value = doc.wiki + append_source_info();
