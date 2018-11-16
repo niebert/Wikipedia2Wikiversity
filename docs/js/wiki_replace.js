@@ -38,14 +38,14 @@ function convertBracketLinks(pString)
 {
   var vPrefix = el("prefix_wiki").value;
   // {{Further|Wikipedia:Ebola virus epidemic in Sierra Leone}}
-  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/g,"{{Further|"+el("prefix_wiki").value+":$1}}");
-  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/g,"{{Further|"+vPrefix+":$1|"+vPrefix+":$2}}");
+  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\}\}/gi,"{{Further|"+el("prefix_wiki").value+":$1}}");
+  pString = pString.replace(/\{\{Further\|([^\|\}:]+)\|([^\|\]:]+)\}\}/gi,"{{Further|"+vPrefix+":$1|"+vPrefix+":$2}}");
  //{{Main|Wikipedia:West African Ebola virus epidemic timeline of reported cases and deaths}}
-  pString = pString.replace(/\{\{Main\|([^\|\}:]+)\}\}/g,"{{Main|"+vPrefix+":$1}}");
+ pString = pString.replace(/\{\{Main\|([^\|\}:]+)\}\}/gi,"{{Main|"+vPrefix+":$1}}");
  //{{Main article|
- pString = pString.replace(/\{\{Main article\|([^\|\}:]+)\}\}/g,"{{Main article|"+vPrefix+":$1}}");
+ pString = pString.replace(/\{\{Main article\|([^\|\}:]+)\}\}/gi,"{{Main article|"+vPrefix+":$1}}");
  //  {{See also|Ebola virus epidemic in West Africa timeline}}
- pString = pString.replace(/\{\{See also\|([^\|\}:]+)\}\}/g,"{{See also|"+vPrefix+":$1}}");
+ pString = pString.replace(/\{\{See also\|([^\|\}:]+)\}\}/gi,"{{See also|"+vPrefix+":$1}}");
  return pString
 }
 
