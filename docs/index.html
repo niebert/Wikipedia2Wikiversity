@@ -5,6 +5,7 @@
    <meta http-equiv="last-modification" content="23.4.2004 (9:35)">
    <meta http-equiv="content-language" content="de">
    <meta http-equiv="desktop-type" content="tasks">
+   <script language="javascript" src="js/linkparam.js"></script>
    <script language="javascript" src="js/wiki_replace.js"></script>
    <script language="javascript" src="js/wtf_fetch.js"></script>
 <script language="javascript">
@@ -297,4 +298,60 @@ Link to further information looks like {{Further|Ebola virus epidemic in Sierra 
   <br>
   Wikipedia2Wikiversity uses <a href="https://www.github.com/niebert/wtf_fetch" target="_blank">wtf_fetch to download Wiki-Sources from the MediaWiki API</a>
 </center>
+<script>
+  console.log("Tail Script executed");
+  console.log("vLinkParam created");
+
+    //---------------------------------------
+    //------READ LINKPARAMETER---------------
+    //---------------------------------------
+    var vLinkParam = new LinkParam();
+    vLinkParam.init(document);
+    //------ TiTLE --------------------------
+    if (vLinkParam.exists("title")) {
+      // e.g. index.html?title=Normen,_Metriken,_Topologie
+      console.log("LinkParam 'title' defined");
+      el("tTitle").value = vLinkParam.getValue("title");
+    };
+    if (vLinkParam.exists("article")) {
+      // e.g. index.html?title=Normen,_Metriken,_Topologie
+      console.log("LinkParam 'article' defined");
+      el("tTitle").value = vLinkParam.getValue("article");
+    };
+    //------ AUTHOR -------------------------
+    if (vLinkParam.exists("author")) {
+      // e.g. index.html?author=Engelbert_Niehaus
+      console.log("LinkParam 'author' defined");
+      el("tAuthor").value = vLinkParam.getValue("author");
+    };
+    //------ LANGUAGE ----------------------
+    if (vLinkParam.exists("language")) {
+      // e.g. index.html?language=de
+      console.log("LinkParam 'language' defined");
+      el("sWikiLanguage").value = vLinkParam.getValue("language");
+    };
+    //------ DOMAIN ------------------------
+    if (vLinkParam.exists("domain")) {
+      // e.g. index.html?domain=wikipedia
+      console.log("LinkParam 'domain' defined");
+      el("sWikiDomain").value  = vLinkParam.getValue("domain");
+    };
+    //--------------------------------------
+
+  function callWikiDownload() {
+      downloadWikiDoc(el("wikiarticle").value,el("wikiid").value);
+  };
+
+  function downloadWikiDoc(pArticle,pWikiID) {
+    wtf.from_api(pArticle, pWikiID, function(markup){// Callback function after success
+      console.log("LOG (PlainText result): "+wtf.plaintext(markup));
+      // store markup result in textarea
+      document.getElementById("wikimarkup").value = markup;
+      // store JSON parse result in textarea
+      var data = wtf.parse(markup);
+      document.getElementById("wikijson").value = JSON.stringify(data,null,4);
+    })
+  }
+//setWikiLanguage(el("sWikiLanguage").value);
+</script>
 </body></html>
