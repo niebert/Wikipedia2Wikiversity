@@ -1,0 +1,27 @@
+{
+  "name": "wikipedia2wikiversity",
+  "version": "1.0.0",
+  "description": "Link Converter for Wikipedia to Wikiversity Special Imports",
+  "main": "docs/js/wikipedia2wikiversity.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node-lint docs/js/wikipedia2wikiversity.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niebert/Wikipedia2Wikiversity.git"
+  },
+  "keywords": [
+    "Wikiversity",
+    "Link",
+    "Converter"
+  ],
+  "author": "Engelbert Niehaus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/niebert/Wikipedia2Wikiversity/issues"
+  },
+  "homepage": "https://github.com/niebert/Wikipedia2Wikiversity#readme"
+}
