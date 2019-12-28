@@ -10,7 +10,7 @@ function title4url() {
 function getSourceURL () {
   var vURL = "https://"+el("sWikiLanguage").value + "." + el("sWikiDomain").value+".org/wiki/";
   vURL += title4url();
-  return vURL
+  return vURL;
 }
 
 function callWikiDisplay() {
@@ -27,15 +27,15 @@ function getDate4Lang(pLang) {
     var vDateStr = "";
     switch (pLang) {
       case "de":
-        vDateStr = vDays + "." + vMonths + "." + vYear
+        vDateStr = vDays + "." + vMonths + "." + vYear;
       break;
       case "en":
-        vDateStr = vMonths + "/" + vDays +  "/" + vYear
+        vDateStr = vMonths + "/" + vDays +  "/" + vYear;
       break;
       default:
         vDateStr = vYear + "/"  + vMonths + "/" + vDays;
-    };
-    return vDateStr
+    }
+    return vDateStr;
 }
 
 function firstUpperCase(pString) {
@@ -72,6 +72,14 @@ function get_history_link(pLang) {
   return vURL;
 }
 
+function wikipedia2wikiversity_link() {
+  var vURL = "https://niebert.github.com/Wikipedia2Wikiversity?";
+  vURL += "lang="+get_language()+"&";
+  vURL += "domain="+get_domain()+"&";
+  vURL += "title="+title4url();
+  return vURL;
+}
+
 function append_source_info () {
   var out = "\n";
   var vLang = get_language();
@@ -84,15 +92,15 @@ function append_source_info () {
       out += "\nDiese Seite wurde auf Basis der folgenden [" + vURL + " "+vDomain+"-Quelle] erstellt:";
       out += "\n* [" + vURL + " "+get_title()+"] "+vURL;
       out += "\n* Datum: "+getDate4Lang(vLang) + " - [" + get_history_link(vLang) + " Versionsgeschichte "+vDomain+ "]";
-      out += "\n* [https://niebert.github.com/Wikipedia2Wikiversity Wikipedia2Wikiversity-Konverter]: https://niebert.github.com/Wikipedia2Wikiversity";
+      out += "\n* [" + wikipedia2wikiversity_link() +" Wikipedia2Wikiversity-Konverter]: https://niebert.github.com/Wikipedia2Wikiversity";
       out += "\n";
     break;
     default:
       out += "\n"+vHeader;
-      out += "\nThis page was based on the following [" + vURL + " "+el("sWikiDomain").value+"-source page]:";
+      out += "\nThis page was based on the following [" + vURL + " "+vDomain+" source page]:";
       out += "\n* [" + vURL + " "+el("tTitle").value+"] "+vURL;
       out += "\n* Date: "+getDate4Lang(vLang) + " - [" + get_history_link(vLang) + " Source History "+vDomain+ "]";
-      out += "\n* [https://niebert.github.com/Wikipedia2Wikiversity Wikipedia2Wikiversity-Converter]: https://niebert.github.com/Wikipedia2Wikiversity";
+      out += "\n* [" + wikipedia2wikiversity_link() +" Wikipedia2Wikiversity-Converter]: https://niebert.github.com/Wikipedia2Wikiversity";
       out += "\n";
   }
   out += "";
@@ -104,18 +112,19 @@ function info_exists(pString) {
   var vHeader = get_header_info(vLang);
   var vRet = "NO";
   if (pString && (pString.indexOf(vHeader) > 0)) {
-    vRet = "YES"
-  };
+    vRet = "YES";
+  }
   console.log("Info-Section exists? "+vRet);
-  return vRet
+  return vRet;
 }
 
 function callWikiSource() {
     //document.location.href=vURL;
   //window.open(vURL);
-  console.log("CALL: callWikiSource() - Title: '" + el("tTitle").value + "'"
-    + " Language: '" + el("sWikiLanguage").value + "'"
-    + " Domain: '" + el("sWikiDomain").value+"'" );
+  var vLog = "CALL: callWikiSource() - Title: '" + el("tTitle").value + "'";
+  vLog  += " Language: '" + el("sWikiLanguage").value + "'";
+  vLog  += " Domain: '" + el("sWikiDomain").value+"'";
+  console.log(vLog);
   wtf_fetch.getPage(el("tTitle").value , el("sWikiLanguage").value ,el("sWikiDomain").value, function(err, doc) {
     // doc contains the download
     // console.log(JSON.stringify(doc.wiki))
@@ -152,13 +161,13 @@ function setWikiLanguage(pLang) {
   var vDomain = el("sWikiDomain").value;
   switch (vDomain) {
     case "wikipedia":
-      vDomain = "w"
+      vDomain = "w";
     break;
     case "wikiversity":
-      vDomain = "v"
+      vDomain = "v";
     break;
     case "wikibooks":
-      vDomain = "b"
+      vDomain = "b";
     break;
     default:
 
