@@ -73,7 +73,7 @@ function get_history_link(pLang) {
 }
 
 function wikipedia2wikiversity_link() {
-  var vURL = "https://niebert.github.com/Wikipedia2Wikiversity?";
+  var vURL = "https://niebert.github.io/Wikipedia2Wikiversity?";
   vURL += "lang="+get_language()+"&";
   vURL += "domain="+get_domain()+"&";
   vURL += "title="+title4url();
@@ -92,7 +92,7 @@ function append_source_info () {
       out += "\nDiese Seite wurde auf Basis der folgenden [" + vURL + " "+vDomain+"-Quelle] erstellt:";
       out += "\n* [" + vURL + " "+get_title()+"] "+vURL;
       out += "\n* Datum: "+getDate4Lang(vLang) + " - [" + get_history_link(vLang) + " Versionsgeschichte "+vDomain+ "]";
-      out += "\n* [" + wikipedia2wikiversity_link() +" Wikipedia2Wikiversity-Konverter]: https://niebert.github.com/Wikipedia2Wikiversity";
+      out += "\n* [" + wikipedia2wikiversity_link() +" Wikipedia2Wikiversity-Konverter]: https://niebert.github.io/Wikipedia2Wikiversity";
       out += "\n";
     break;
     default:
@@ -100,7 +100,7 @@ function append_source_info () {
       out += "\nThis page was based on the following [" + vURL + " "+vDomain+" source page]:";
       out += "\n* [" + vURL + " "+el("tTitle").value+"] "+vURL;
       out += "\n* Date: "+getDate4Lang(vLang) + " - [" + get_history_link(vLang) + " Source History "+vDomain+ "]";
-      out += "\n* [" + wikipedia2wikiversity_link() +" Wikipedia2Wikiversity-Converter]: https://niebert.github.com/Wikipedia2Wikiversity";
+      out += "\n* [" + wikipedia2wikiversity_link() +" Wikipedia2Wikiversity-Converter]: https://niebert.github.io/Wikipedia2Wikiversity";
       out += "\n";
   }
   out += "";
